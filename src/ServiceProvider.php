@@ -23,6 +23,15 @@
             // Add the mappable middleware to the global middleware stack
             $this->app['router']->aliasMiddleware('mappable', \Dgtlss\Columbus\Middleware\Mappable::class);
 
+            // Register a sitemap route if one doesn't already exist
+            if(!$this->app['router']->has('sitemap')){
+                $this->app['router']->get('sitemap', function(){
+                    return response()->file(public_path('sitemap.xml'), [
+                        'Content-Type' => 'application/xml'
+                    ]);
+                })->name('sitemap');
+            }
+
         }
 
         protected function setupConfig(){
