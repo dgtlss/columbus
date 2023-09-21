@@ -1,5 +1,6 @@
 # 🧭 Columbus 
 
+![Columbus OG Image](columbus_og.png)
 Columbus is a lightweight composer package that allows you to quickly and easily generate sitemaps for your Laravel application. 
 
 ## Installation
