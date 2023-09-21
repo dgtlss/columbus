@@ -15,10 +15,13 @@ class Map extends Command
 
     protected $version;
 
+    protected $allowedMethods;
+
     public function __construct()
     {
         parent::__construct();
 		$this->version = json_decode(file_get_contents(__DIR__.'/../../composer.json'))->version;		
+        $this->allowedMethods = config('columbus.allowed_methods');
     }
 
     public function handle()
@@ -36,7 +39,7 @@ class Map extends Command
         $routesTable = [];
         foreach($routes as $route){
             $middleware = $route->middleware();
-            if(in_array('mappable', $middleware)){
+            if(in_array('Mappable', $middleware)){
                 $routesTable[] = [
                     'uri' => $route->uri(),
                     'name' => $route->getName(),
@@ -69,7 +72,7 @@ class Map extends Command
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.PHP_EOL;
 
         foreach($routes as $route){
-            if(in_array('mappable', $route->middleware())){
+            if(in_array('Mappable', $route->middleware())){
                 if(in_array(config('columbus.allowed_methods'), $route->methods())){
                     if($route->getName() && $route->getName() != 'columbus.map'){
                         $sitemap .= '    <url>'.PHP_EOL;
