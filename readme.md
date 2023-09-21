@@ -19,7 +19,7 @@ php artisan columbus:init
 Once you have initialised Columbus you will need to add the middleware to your `app/Http/Kernel.php` file. You can do this by adding the following line to the `$routeMiddleware` array:
 
 ```
-'Mappable' => \App\Http\Middleware\mappable::class,
+'Mappable' => \App\Http\Middleware\Mappable::class,
 ```
 
 Now that the middleware has been added to your laravel application you can generate your sitemap by running the following command:
