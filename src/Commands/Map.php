@@ -71,9 +71,11 @@ class Map extends Command
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.PHP_EOL;
 
+        $removedLinks = 0;
         foreach($routes as $route){
             if(in_array('Mappable', $route->middleware())){
-                if(in_array(config('columbus.allowed_methods'), $route->methods())){
+                $allowedMethods = array_intersect(config('columbus.allowed_methods'), $route->methods());
+                if($allowedMethods != []){
                     if($route->getName() && $route->getName() != 'columbus.map'){
                         $sitemap .= '    <url>'.PHP_EOL;
                         $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
@@ -82,6 +84,8 @@ class Map extends Command
                         $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
                         $sitemap .= '    </url>'.PHP_EOL;
                     }
+                }else{
+                    $removedLinks++;
                 }
             }
         }
@@ -89,6 +93,7 @@ class Map extends Command
         $sitemap .= '</urlset>';
 
         $this->info('📝 Sitemap generated with '.$mappableRoutes. ' routes');
+        $this->info('📝 Removed '.$removedLinks. ' routes because of method restrictions');
 
         $this->info('💾 Saving sitemap...');
 
