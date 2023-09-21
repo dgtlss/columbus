@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Route;
 use Cache;
 
-class Map extends Command
+class Init extends Command
 {
     protected $signature = 'columbus:init';
     protected $description = 'Setup Columbus for use in your application';

@@ -108,6 +108,5 @@ class Map extends Command
         if(config('columbus.notifications')){
             $this->notify('💚 Columbus Finished Successfully! ' ,'Completed in: '.round(microtime(true) - $start, 2).'s',__DIR__.'/../../columbus.png');
         }
-
     }
 }
