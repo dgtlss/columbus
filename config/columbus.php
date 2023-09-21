@@ -26,8 +26,9 @@ return[
     | Allowed Methods
     |--------------------------------------------------------------------------
     |
-    | The HTTP methods that are allowed to be mapped.
+    | The HTTP methods that are allowed to be mapped for use in the sitemap.
     | By default only GET requests are mapped, but you can add more here.
+    | Example: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     */
 
     'allowed_methods' => [
