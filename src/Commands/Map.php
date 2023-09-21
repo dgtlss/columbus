@@ -47,6 +47,14 @@ class Map extends Command
             }
         }
 
+        // if we haven't found any mappable routes, then we can't continue. End the command here.
+        if($mappableRoutes == 0){
+            $this->error('🚫 No routes found, please check your routes for the "mappable" middleware and try again');
+            return;
+        }
+
+        $this->info('📝 Found '.$mappableRoutes.' eligible routes');
+
         // Show a table of all the mapped routes
         $this->table([
             'URI',
@@ -54,14 +62,6 @@ class Map extends Command
             'Methods',
             'Middleware',
         ], $routesTable);
-
-        $this->info('📝 Found '.$mappableRoutes.' eligible routes');
-
-        // if we haven't found any mappable routes, then we can't continue. End the command here.
-        if($mappableRoutes == 0){
-            $this->error('🚫 No routes found, please check your routes for the "mappable" middleware and try again');
-            return;
-        }
 
         $this->info('📝 Generating sitemap...');
 
