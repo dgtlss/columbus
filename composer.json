@@ -1,6 +1,6 @@
 {
     "name": "dgtlss/columbus",
-    "description": "Plugin to the Cooker Engine! Easy site building by Genericmilk",
+    "description": "Quick & Simple sitemap generator for laravel",
     "keywords": ["laravel", "sitemap"],
     "version": "1.0.0",
     "license": "MIT",
