@@ -16,6 +16,8 @@ return[
     |--------------------------------------------------------------------------
     |
     | Send a desktop notification when sitemap has been generated
+    | If you don't want to use this feature, set this to false.
+    | Please Note: Columbus will still feedback to the console even if this option is set to false
     |
     */
 
