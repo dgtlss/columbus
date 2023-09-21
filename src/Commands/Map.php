@@ -70,13 +70,15 @@ class Map extends Command
 
         foreach($routes as $route){
             if(in_array('mappable', $route->middleware())){
-                if($route->getName() && $route->getName() != 'columbus.map'){
-                    $sitemap .= '    <url>'.PHP_EOL;
-                    $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
-                    $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
-                    $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
-                    $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
-                    $sitemap .= '    </url>'.PHP_EOL;
+                if(in_array(config('columbus.allowed_methods'), $route->methods())){
+                    if($route->getName() && $route->getName() != 'columbus.map'){
+                        $sitemap .= '    <url>'.PHP_EOL;
+                        $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
+                        $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
+                        $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
+                        $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
+                        $sitemap .= '    </url>'.PHP_EOL;
+                    }
                 }
             }
         }

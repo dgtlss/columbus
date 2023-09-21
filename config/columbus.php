@@ -21,5 +21,18 @@ return[
 
     'notifications' => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed Methods
+    |--------------------------------------------------------------------------
+    |
+    | The HTTP methods that are allowed to be mapped.
+    | By default only GET requests are mapped, but you can add more here.
+    */
+
+    'allowed_methods' => [
+        'GET',
+    ],
+
 
 ];
