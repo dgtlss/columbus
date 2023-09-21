@@ -39,6 +39,18 @@ class Init extends Command
             'name' => "Mappable",
         ]);
 
+        // Open the web.php routes file
+        $routesFile = file_get_contents(base_path('routes/web.php'));
+
+        // Add an empty route group with a Mappable middleware to the bottom of the file
+        $routesFile .= "\nRoute::middleware(['Mappable'])->group(function(){\n\t/* routes in this group will be added to the sitemap */\n});";
+
+        // Add a line to the bottom of the file for the sitemap url
+        $routesFile .= "\nRoute::get('sitemap', function(){\n\treturn response()->file(public_path('sitemap.xml'), [\n\t\t'Content-Type' => 'application/xml'\n\t]);\n})->name('sitemap');";
+
+        // Save the file
+        file_put_contents(base_path('routes/web.php'), $routesFile);
+
         $this->info('📝 Mappable middleware added to global middleware stack!');
 
         $this->info('🧭 Columbus initialised successfully!');

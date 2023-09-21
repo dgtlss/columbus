@@ -2,7 +2,7 @@
     "name": "dgtlss/columbus",
     "description": "Quick & Simple sitemap generator for laravel",
     "keywords": ["laravel", "sitemap"],
-    "version": "1.2.1",
+    "version": "1.2.2",
     "license": "MIT",
     "authors": [
         {
