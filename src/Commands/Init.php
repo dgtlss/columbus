@@ -37,7 +37,6 @@ class Init extends Command
         // Add the mappable middleware to the global middleware stack
         $this->call('make:middleware', [
             'name' => "Mappable",
-            '--force' => true,
         ]);
 
         $this->info('📝 Mappable middleware added to global middleware stack!');
