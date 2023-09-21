@@ -52,7 +52,7 @@ class Map extends Command
 
         // if we haven't found any mappable routes, then we can't continue. End the command here.
         if($mappableRoutes == 0){
-            $this->error('🚫 No routes found, please check your routes for the "mappable" middleware and try again');
+            $this->error('🚫 No routes found, please check your routes for the "Mappable" middleware and try again');
             return;
         }
 
