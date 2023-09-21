@@ -57,6 +57,12 @@ class Map extends Command
 
         $this->info('📝 Found '.$mappableRoutes.' eligible routes');
 
+        // if we haven't found any mappable routes, then we can't continue. End the command here.
+        if($mappableRoutes == 0){
+            $this->error('🚫 No routes found, please check your routes for the "mappable" middleware and try again');
+            return;
+        }
+
         $this->info('📝 Generating sitemap...');
 
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
@@ -87,6 +93,9 @@ class Map extends Command
 
         $this->info('👍 Done in '.round(microtime(true) - $start, 2).'s');
 
-        $this->notify('💚 Columbus Finished Successfully! ' ,'Completed in: '.round(microtime(true) - $start, 2).'s',__DIR__.'/../../columbus.png');
+        if(config('columbus.notifications')){
+            $this->notify('💚 Columbus Finished Successfully! ' ,'Completed in: '.round(microtime(true) - $start, 2).'s',__DIR__.'/../../columbus.png');
+        }
+
     }
 }

@@ -10,4 +10,16 @@
 
 return[
 
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    |
+    | Send a desktop notification when sitemap has been generated
+    |
+    */
+
+    'notifications' => true,
+
+
 ];
