@@ -92,8 +92,10 @@ class Map extends Command
 
         $sitemap .= '</urlset>';
 
-        $this->info('📝 Sitemap generated with '.$mappableRoutes. ' routes');
-        $this->info('📝 Removed '.$removedLinks. ' routes because of method restrictions');
+        $totalMappedRoutes = $mappableRoutes - $removedLinks;
+
+        $this->info('📝 Sitemap generated with '.$totalMappedRoutes. ' routes');
+        $removedLinks != 0 ? $this->info('📝 Removed '.$removedLinks. ' routes because of method restrictions') : '';
 
         $this->info('💾 Saving sitemap...');
 
