@@ -37,7 +37,7 @@ Now that we have successfully installed and configured Columbus you can start ad
 
 ```
 Route::middleware(['Mappable'])->group(function(){
-	/* routes in this group will be added to the sitemap */
+    /* routes in this group will be added to the sitemap */
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
