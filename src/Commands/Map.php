@@ -166,6 +166,7 @@ class Map extends Command
                                             // Call the model and get all of the records
                                             $model = new $modelSpace;
                                             $records = $model->all();
+                                            $mappableRoutes = $mappableRoutes + count($records);
                                             // Loop through the records and add them to the sitemap
                                             // we will need to replace the contents of the {variable} with the ID of the record
                                             foreach($records as $record){
@@ -211,7 +212,7 @@ class Map extends Command
 
         $sitemap .= '</urlset>';
 
-        $totalMappedRoutes = $mappableRoutes - $removedLinks;
+        $totalMappedRoutes = $mappableRoutes - $removedLinks - 1;
 
         $this->info('📝 Sitemap generated with '.$totalMappedRoutes. ' routes');
         $removedLinks != 0 ? $this->info('📝 Removed '.$removedLinks. ' routes because of method restrictions') : '';
