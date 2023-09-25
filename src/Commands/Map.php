@@ -107,8 +107,91 @@ class Map extends Command
                                 $controller = $action[0]; // get the controller name
                                 $method = $action[1]; // get the method name
                                 $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
-                                // Read the controller method and work out what data is being used in the route
-                                
+                                $reflection = new ReflectionMethod($controller, $method); // create a reflection of the method
+                                // get the lines of the method
+                                $lines = file($reflection->getFileName());
+                                $lineNumber = $reflection->getStartLine(); // get the start line of the method
+                                $lineNumberEnd = $reflection->getEndLine(); // get the end line of the method
+                                // Read between these lines and look for any models or DB queries
+                                // In most cases a DB query will be used to find the model, so we'll look for DB:: and ::find
+                                $models = [];
+                                $dbQueries = [];
+                                for($i = $lineNumber; $i <= $lineNumberEnd; $i++){
+                                    $line = $lines[$i];
+                                    if(strpos($line, 'DB') !== false){
+                                        $dbQueries[] = $line;
+                                    }elseif(strpos($line, '::find') !== false){
+                                        $models[] = $line;
+                                    }
+                                }
+                                if($models == [] && $dbQueries == []){
+                                    // Nothing was found inside of the controller method specified that we can work with. 
+                                    // Ignore this route
+                                    $removedLinks++;
+                                    $this->info('🚫 No models or DB queries found in '.$controller.'@'.$method);
+                                }elseif($models != []){
+                                    $this->info('📝 Found '.count($models).' models in '.$controller.'@'.$method);
+                                    foreach($models as $model){
+                                        /* we need to look before the ::find to see what the name of the model is. 
+                                        * this will have a space before it in most cases, so we need to look between space & ::find
+                                        */
+                                        $modelname = explode('::find', $model);
+                                        $modelname = explode(' ', $modelname[0]);
+                                        $modelname = end($modelname);
+                                        // check to see if the model exists by looking at the top of the file for the use statement
+                                        $modelExists = false;
+                                        $useStatement = null;
+                                        foreach($lines as $line){
+                                            if(strpos($line, 'use App\\Models\\'.$modelname) !== false){
+                                                $useStatement = $line;
+                                                $modelExists = true;
+                                            }else{
+                                                // if the model doesn't exist, we'll check to see if it's a custom model
+                                                if(strpos($line, 'use App\\') !== false){
+                                                    $useStatement = $line;
+                                                    $modelExists = true;
+                                                }
+                                            }
+                                        }
+                                        if($modelExists){
+                                            // clean the line by removing the use space and ; from the line
+                                            $useStatement = str_replace('use ', '', $useStatement);
+                                            $useStatement = str_replace(';', '', $useStatement);
+                                            $useStatement = str_replace(' ', '', $useStatement);
+                                            // remove any trailing space from the line
+                                            $useStatement = trim($useStatement);
+                                            // add a \ to the start of the use statement to make sure it's in the global namespace
+                                            $useStatement = '\\'.$useStatement;
+                                            $modelSpace = $useStatement;
+                                            // Call the model and get all of the records
+                                            $model = new $modelSpace;
+                                            $records = $model->all();
+                                            // Loop through the records and add them to the sitemap
+                                            // we will need to replace the contents of the {variable} with the ID of the record
+                                            foreach($records as $record){
+                                                $url = $route->uri();
+                                                // get the variable name from the route
+                                                $variable = explode('{', $url);
+                                                $variable = explode('}', $variable[1]);
+                                                $variable = $variable[0];
+                                                // replace the variable with the ID of the record
+                                                $url = str_replace('{'.$variable.'}', $record->id, $url);
+                                                // add the url to the sitemap
+                                                $sitemap .= '    <url>'.PHP_EOL;
+                                                $sitemap .= '        <loc>'.url($url).'</loc>'.PHP_EOL;
+                                                $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
+                                                $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
+                                                $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
+                                                $sitemap .= '    </url>'.PHP_EOL;
+                                            }
+                                        }else{
+                                            $this->error('🚫 Model '.$modelname.' not found');
+                                            $removedLinks++;
+                                        }
+                                    }
+                                }elseif($dbQueries != []){
+                                    $this->info('📝 Found '.count($dbQueries).' DB queries in '.$controller.'@'.$method);
+                                }                              
                             }
                         }else{
                             // No variable found, add the route to the sitemap
