@@ -36,6 +36,7 @@ class Map extends Command
         
         // Loop through the routes and workout which ones are mappable
         $mappableRoutes = 0;
+        $variableRoutes = 0;
         $routesTable = [];
         foreach($routes as $route){
             $middleware = $route->middleware();
@@ -44,9 +45,14 @@ class Map extends Command
                     'uri' => $route->uri(),
                     'name' => $route->getName(),
                     'methods' => implode(', ', $route->methods()),
+                    'actions' => $route->getActionName(),
                     'middleware' => implode(', ', $route->middleware()),
                 ];
                 $mappableRoutes++;
+                // check if the route has any variables in it
+                if(strpos($route->uri(), '{') !== false){
+                    $variableRoutes++;
+                }
             }
         }
 
@@ -58,11 +64,16 @@ class Map extends Command
 
         $this->info('📝 Found '.$mappableRoutes.' eligible routes');
 
+        if($variableRoutes != 0){
+            $this->info('📝 Found '.$variableRoutes.' dynamic routes with variables');
+        }
+
         // Show a table of all the mapped routes
         $this->table([
             'URI',
             'Name',
             'Methods',
+            'Actions',
             'Middleware',
         ], $routesTable);
 
