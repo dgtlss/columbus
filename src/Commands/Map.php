@@ -5,6 +5,7 @@ namespace Dgtlss\Columbus\Commands;
 use Illuminate\Console\Command;
 
 use Carbon\Carbon;
+use ReflectionMethod;
 use Route;
 use Cache;
 
@@ -106,6 +107,12 @@ class Map extends Command
                                 $controller = $action[0]; // get the controller name
                                 $method = $action[1]; // get the method name
                                 $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
+                                // Get information about the method
+                                $reflection = new ReflectionMethod($controller, $method);
+                                $parameters = $reflection->getParameters();
+                                // Loop through the parameters and find the variable names
+                                dd($parameters);
+
                             }
                         }else{
                             // No variable found, add the route to the sitemap
