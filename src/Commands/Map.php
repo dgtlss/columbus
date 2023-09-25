@@ -98,9 +98,7 @@ class Map extends Command
                             // Variable found, dig into the action and try to find the variables that are being used
                             $action = $route->getActionName();
                             $action = explode('@', $action);
-                            $controller = $action[0];
-                            $method = $action[1];
-                            $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
+                            dd($action);
                         }else{
                             // No variable found, add the route to the sitemap
                             $sitemap .= '    <url>'.PHP_EOL;
