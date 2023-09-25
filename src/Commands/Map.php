@@ -109,27 +109,7 @@ class Map extends Command
                                 $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
                                 // Get information about the method
                                 $reflection = new ReflectionMethod($controller, $method);
-                                $parameters = $reflection->getParameters();
-                                $parameterNames = [];
-                                foreach($parameters as $parameter){
-                                    $parameterNames[] = $parameter->getName();
-                                }
-                                // Loop through the parameters and see if we can find a match in the route
-                                foreach($parameterNames as $parameterName){
-                                    if(strpos($route->uri(), '{'.$parameterName.'}') !== false){
-                                        // We found a match, add the route to the sitemap
-                                        $sitemap .= '    <url>'.PHP_EOL;
-                                        $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
-                                        $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
-                                        $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
-                                        $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
-                                        $sitemap .= '    </url>'.PHP_EOL;
-                                    }else{
-                                        // No match found, remove the route
-                                        $removedLinks++;
-                                    }
-                                }
-
+                                dd($reflection);
                             }
                         }else{
                             // No variable found, add the route to the sitemap
