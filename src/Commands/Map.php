@@ -47,6 +47,7 @@ class Map extends Command
                     'methods' => implode(', ', $route->methods()),
                     'actions' => $route->getActionName(),
                     'middleware' => implode(', ', $route->middleware()),
+                    'Type' => strpos($route->uri(), '{') !== false ? 'Variable Route' : 'Standard Route',
                 ];
                 $mappableRoutes++;
                 // check if the route has any variables in it
@@ -75,6 +76,7 @@ class Map extends Command
             'Methods',
             'Actions',
             'Middleware',
+            'Type',
         ], $routesTable);
 
         $this->info('📝 Generating sitemap...');
