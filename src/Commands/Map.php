@@ -93,15 +93,26 @@ class Map extends Command
                 if($allowedMethods != []){
                     // Make sure the route name isn't the columbus map route
                     if($route->getName() != 'columbus.sitemap'){
-                        $sitemap .= '    <url>'.PHP_EOL;
-                        $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
-                        $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
-                        $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
-                        $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
-                        $sitemap .= '    </url>'.PHP_EOL;
+                        // check to see if the route has a variable in it
+                        if(strpos($route->uri(), '{') !== false){
+                            // Variable found, dig into the action and try to find the variables that are being used
+                            $action = $route->getActionName();
+                            $action = explode('@', $action);
+                            $controller = $action[0];
+                            $method = $action[1];
+                            $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
+                        }else{
+                            // No variable found, add the route to the sitemap
+                            $sitemap .= '    <url>'.PHP_EOL;
+                            $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
+                            $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
+                            $sitemap .= '        <changefreq>daily</changefreq>'.PHP_EOL;
+                            $sitemap .= '        <priority>0.5</priority>'.PHP_EOL;
+                            $sitemap .= '    </url>'.PHP_EOL;
+                        }
+                    }else{
+                        $removedLinks++;
                     }
-                }else{
-                    $removedLinks++;
                 }
             }
         }
