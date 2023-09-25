@@ -107,9 +107,8 @@ class Map extends Command
                                 $controller = $action[0]; // get the controller name
                                 $method = $action[1]; // get the method name
                                 $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
-                                // Get information about the method
-                                $reflection = new ReflectionMethod($controller, $method);
-                                dd($reflection);
+                                // Read the controller method and work out what data is being used in the route
+                                
                             }
                         }else{
                             // No variable found, add the route to the sitemap
