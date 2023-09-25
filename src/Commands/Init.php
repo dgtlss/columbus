@@ -46,7 +46,7 @@ class Init extends Command
         $routesFile .= "\nRoute::middleware(['Mappable'])->group(function(){\n\t/* routes in this group will be added to the sitemap */\n});";
 
         // Add a line to the bottom of the file for the sitemap url
-        $routesFile .= "\nRoute::get('sitemap', function(){\n\treturn response()->file(public_path('sitemap.xml'), [\n\t\t'Content-Type' => 'application/xml'\n\t]);\n})->name('sitemap');";
+        $routesFile .= "\nRoute::get('sitemap', function(){\n\treturn response()->file(public_path('sitemap.xml'), [\n\t\t'Content-Type' => 'application/xml'\n\t]);\n})->name('columbus.sitemap');";
 
         // Save the file
         file_put_contents(base_path('routes/web.php'), $routesFile);

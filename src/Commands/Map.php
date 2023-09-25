@@ -86,10 +86,13 @@ class Map extends Command
 
         $removedLinks = 0;
         foreach($routes as $route){
+            // Make sure the route is mappable
             if(in_array('Mappable', $route->middleware())){
+                // Make sure the route is using one of the allowed methods
                 $allowedMethods = array_intersect(config('columbus.allowed_methods'), $route->methods());
                 if($allowedMethods != []){
-                    if($route->getName() && $route->getName() != 'columbus.map'){
+                    // Make sure the route name isn't the columbus map route
+                    if($route->getName() != 'columbus.sitemap'){
                         $sitemap .= '    <url>'.PHP_EOL;
                         $sitemap .= '        <loc>'.url($route->uri()).'</loc>'.PHP_EOL;
                         $sitemap .= '        <lastmod>'.Carbon::now()->toAtomString().'</lastmod>'.PHP_EOL;
