@@ -42,12 +42,12 @@ class Map extends Command
             $middleware = $route->middleware();
             if(in_array('Mappable', $middleware)){
                 $routesTable[] = [
-                    'uri' => $route->uri(),
-                    'name' => $route->getName(),
-                    'methods' => implode(', ', $route->methods()),
-                    'actions' => $route->getActionName(),
-                    'middleware' => implode(', ', $route->middleware()),
-                    'Type' => strpos($route->uri(), '{') !== false ? 'Variable Route' : 'Standard Route',
+                    'uri' => $route->uri(), // show the uri as a string
+                    'name' => $route->getName(), // show the name as a string
+                    'methods' => implode(', ', $route->methods()), // show the methods as a string
+                    'actions' => $route->getActionName(), // show the action as a string
+                    'middleware' => implode(', ', $route->middleware()), // show the middleware as a string
+                    'Type' => strpos($route->uri(), '{') !== false ? 'Variable Route' : 'Standard Route', // check if the route has a { if so it's a variable route
                 ];
                 $mappableRoutes++;
                 // check if the route has any variables in it
