@@ -98,7 +98,15 @@ class Map extends Command
                             // Variable found, dig into the action and try to find the variables that are being used
                             $action = $route->getActionName();
                             $action = explode('@', $action);
-                            dd($action);
+                            // if the action is a closure, we can't dig into it, so we'll skip it
+                            if($action[0] == 'Closure'){
+                                $removedLinks++;
+                                continue;
+                            }else{
+                                $controller = $action[0]; // get the controller name
+                                $method = $action[1]; // get the method name
+                                $this->info('📝 Found variable route: '.$route->uri().' in '.$controller.'@'.$method);
+                            }
                         }else{
                             // No variable found, add the route to the sitemap
                             $sitemap .= '    <url>'.PHP_EOL;
